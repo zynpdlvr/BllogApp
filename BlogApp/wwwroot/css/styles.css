@@ -1,0 +1,81 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1;
+}
+
+footer {
+    flex-shrink: 0;
+}
+
+label{
+    font-size: 20;
+}
+
+.buttonAll{
+    background-color:rgb(211, 239, 255); 
+     color:black;  
+     border: none; 
+     width: 30%; 
+     max-width: 300px;
+     text-align: center;
+     align-items: center;
+}
+
+.buttonAll:hover{
+    background-color:rgb(168, 207, 230); 
+}
+
+.buttonStuck {
+    position: fixed;
+    top: 85%;
+    right: 5%;
+    z-index: 1000;
+    width: 80px; /* Adjust as needed */
+    height: 80px; /* Adjust as needed */
+    border-radius: 50%;
+    background-color: #6f8bc9; /* Default background color */
+    color: white; /* Default text color */
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 70px ;
+    text-align: center;
+}
+
+.buttonStuck:hover {
+    background-color: #213488;
+    color: white; 
+}
+.tooltip {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: left;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1001;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.buttonStuck:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}

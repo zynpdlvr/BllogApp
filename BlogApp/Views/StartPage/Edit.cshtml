@@ -1,0 +1,96 @@
+@model PostCreateViewModel
+@using System.Security.Claims
+
+<div class="container mt-4">
+    <form asp-controller="StartPage" asp-action="Edit" method="post">
+        <div class="row">
+            <!-- Main Form Section -->
+            <div class="col-md-9">
+                <div class="bg-white p-4 border rounded shadow-sm">
+                    <h1 class="h3 mb-4">Edit Post</h1>
+                    
+                    <!-- Validation Summary -->
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <!-- Hidden PostId Field -->
+                    <input type="hidden" asp-for="PostId" />
+                    
+                    <!-- Title Field -->
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label">Title</label>
+                        <input asp-for="Title" class="form-control" placeholder="Enter post title" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    
+                    <!-- Description Field -->
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <input asp-for="Description" class="form-control" placeholder="Enter post description" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    
+                    <!-- URL Field -->
+                    <div class="mb-3">
+                        <label asp-for="Url" class="form-label">URL</label>
+                        <input asp-for="Url" class="form-control" placeholder="Enter post URL" />
+                        <span asp-validation-for="Url" class="text-danger"></span>
+                    </div>
+                    
+                    <!-- Content Field -->
+                    <div class="mb-3">
+                        <label asp-for="Content" class="form-label">Content</label>
+                        <textarea asp-for="Content" class="form-control" id="Content" placeholder="Enter post content"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                    
+                    <!-- IsActive Checkbox (Conditional) -->
+                    @if(User.FindFirstValue(ClaimTypes.Role) == "admin"){
+                        <div class="form-check mb-3">
+                            <input asp-for="IsActive" class="form-check-input" id="IsActive" />
+                            <label asp-for="IsActive" class="form-check-label" for="IsActive">Active</label>
+                        </div>
+                    }
+                    
+                    <!-- Submit Button -->
+                    <div style="text-align: center;">
+                    <button type="submit" class="buttonAll btn btn-success">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tags Section -->
+            <div class="col-md-3">
+                <div class="bg-white p-4 border rounded shadow-sm">
+                    <h3 class="h5 mb-3">Tags</h3>
+                    @foreach(var tag in ViewBag.Tags){
+                        <div class="form-check mb-2">
+                            <input 
+                                class="form-check-input" 
+                                name="tagIds" 
+                                type="checkbox" 
+                                value="@tag.TagId" 
+                                id="tag_@tag.TagId"
+                                @(Model.Tags.Any(i => i.TagId == tag.TagId) ? "checked" : "") />
+                            <label class="form-check-label" for="tag_@tag.TagId">
+                                @tag.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.2.1/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+            selector: '#Content',
+            menubar: false,
+            plugins: 'lists link image charmap preview',
+            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+            height: 300
+        });
+    </script>
+}

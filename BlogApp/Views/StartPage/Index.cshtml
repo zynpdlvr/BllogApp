@@ -1,0 +1,74 @@
+@using System.Security.Claims
+
+@model PostViewModel
+
+
+@if (User.Identity!.IsAuthenticated)
+{
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="bg-white p-4">
+                <h1 class="h4 mb-4">Populars Posts</h1>
+                @foreach (var post in Model.Posts)
+                {
+                    <div class="card bg-transparent border-0 mb-3">
+                        <div class="row">
+                            <div class="col-4">
+                                <img src="~/img/@post.Image" class="img-fluid rounded" alt="@post.Image">
+                            </div>
+                            <div class="col-8">
+                                <h5><a href="@Url.Action("Details", "StartPage", new { url = post.Url })"
+                                        class="btn btn-link">@post.Title</a></h5>
+                                <p>@post.Description</p>
+                                @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == post.UserId.ToString())
+                                {
+                                    <div style="text-align: right; ">
+                                        <a href="@Url.Action("Edit", "StartPage", new { id = post.PostId })"
+                                            class="buttonAll btn btn-success">Edit</a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-3">
+                }
+                <nav>
+                    <ul class="pagination">
+                        <li class="page-item"><a href="#" class="page-link">1</a></li>
+                        <li class="page-item"><a href="#" class="page-link">2</a></li>
+                        <li class="page-item"><a href="#" class="page-link">3</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <vc:tags-menu></vc:tags-menu>
+            <vc:new-posts></vc:new-posts>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Create", "StartPage")" class="buttonStuck">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-patch-plus"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5" />
+                <path
+                    d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911z" />
+            </svg>
+            <div class="tooltip">Create New Post</div>
+        </a>
+    </div>
+
+
+
+}
+else
+{
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Welcome to BlogApp!</h1>
+        <p class="lead">Your go-to place for the latest blog posts and updates.</p>
+        <hr class="my-4">
+        <p>Explore our latest posts and join the conversation.</p>
+        <a class="buttonAll btn btn-success" href="Users/Register" role="button">Start Reading</a>
+    </div>
+}

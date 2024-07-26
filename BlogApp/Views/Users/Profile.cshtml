@@ -1,0 +1,56 @@
+@model User
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="bg-white p-2">
+            <img src="~/img/@Model.Image" class="img-fluid" alt="">
+        </div>
+    </div>
+    <div class="col-md-10">
+        <div class="bg-white p-4">
+            <h5>@Model.Name</h5>
+            <hr>
+
+            <h2>Post List</h2>
+
+            <hr>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="width: 125px;">Image</th>
+                        <th>Title</th>
+                        <th>IsActive</th>
+                        <th style="width: 150px;">Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Posts)
+                    {
+                        <tr>
+                            <td><img src="~/img/@item.Image" class="img-fluid" alt=""></td>
+                            <td>@item.Title</td>
+                            <td>@item.IsActive</td>
+                            <td>
+                                <a href="/StartPage/Edit/@item.PostId" class="btn btn-warning">Edit</a>
+                                <form asp-controller="StartPage" asp-action="Delete" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.PostId" />
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div id="comments">
+                <h5 class="my-4">Yorumlar</h5>
+                <ul class="list-group">
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <li class="list-group-item"><i class="bi bi-caret-right-text-fill"></i>@comment.Text
+                            <i><u>[@comment.Post.Title]</u></i></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>

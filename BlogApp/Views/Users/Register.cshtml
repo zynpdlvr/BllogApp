@@ -1,0 +1,49 @@
+@model RegisterViewModel
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+        <div class="bg-white p-4 rounded shadow">
+
+            <h3 class="mb-4 text-center">Register</h3>
+            
+            <form asp-controller="Users" asp-action="Register" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3 text-center"></div>
+
+                <div class="mb-3">
+                    <label asp-for="UserName" class="form-label">Username</label>
+                    <input asp-for="UserName" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ConfirmPassword" class="form-label">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                </div>
+                <div class="text-center justify-content-center mt-4">
+                    <button type="submit" class="btn btn-success buttonAll" style="background-color:rgb(211, 239, 255); color:black; border: none; width: 30%; max-width: 300px;">Register</button>
+                </div>
+                
+            </form>
+            
+
+            <div class="mt-4 text-center">
+                <p>Already a member?</p>
+                <a asp-controller="Users" asp-action="Login" class="buttonAll btn btn-success" >Sign in</a>
+            </div>
+        </div>
+    </div>
+</div>
