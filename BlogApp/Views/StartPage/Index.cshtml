@@ -2,13 +2,13 @@
 
 @model PostViewModel
 
-
 @if (User.Identity!.IsAuthenticated)
 {
+
     <div class="row">
         <div class="col-lg-8">
             <div class="bg-white p-4">
-                <h1 class="h4 mb-4">Populars Posts</h1>
+                <h1 class="h4 mb-4">Popular Posts</h1>
                 @foreach (var post in Model.Posts)
                 {
                     <div class="card bg-transparent border-0 mb-3">
@@ -20,11 +20,19 @@
                                 <h5><a href="@Url.Action("Details", "StartPage", new { url = post.Url })"
                                         class="btn btn-link">@post.Title</a></h5>
                                 <p>@post.Description</p>
-                                @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == post.UserId.ToString())
+                                @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == post.UserId.ToString() ||
+                               User.IsInRole("admin"))
                                 {
                                     <div style="text-align: right; ">
                                         <a href="@Url.Action("Edit", "StartPage", new { id = post.PostId })"
                                             class="buttonAll btn btn-success">Edit</a>
+                                    </div>
+                                    <div style="text-align: right; ">
+                                        <form asp-action="Delete" asp-controller="StartPage" method="post" style="display:inline;"
+                                            onsubmit="return confirm('Are you sure you want to delete this post?');">
+                                            <input type="hidden" name="id" value="@post.PostId" />
+                                            <button type="submit" class="buttonAll btn btn-danger">Delete</button>
+                                        </form>
                                     </div>
                                 }
                             </div>
@@ -46,6 +54,58 @@
             <vc:new-posts></vc:new-posts>
         </div>
     </div>
+
+    @if (User.IsInRole("admin"))
+    {
+        var adminData = (dynamic)ViewData["AdminData"];
+        <h4 style="background-color: rgb(146, 205, 233); padding: 10px; border-radius: 4px; margin-bottom: 0;">Admin Stats</h4>
+        <div class="container mt-2" style="background-color: rgb(162, 222, 240); padding: 10px; border-radius: 4px;">
+            <div class="row">
+                <div class="col-12 col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-header">User Count</div>
+                        <div class="card-body p-2">
+                            <p class="mb-0">Total Users: @adminData.UserCount</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-header">Tag Statistics</div>
+                        <div class="card-body p-2">
+                            <ul class="list-group list-group-flush">
+                                @foreach (var tag in adminData.TagStatistics)
+                                {
+                                    <li class="list-group-item p-1">
+                                        <strong>@tag.Text:</strong> @tag.PostCount posts
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-header">Most Active Users</div>
+                        <div class="card-body p-2">
+                            <ul class="list-group list-group-flush">
+                                @foreach (var user in adminData.MostActiveUsers)
+                                {
+                                    <li class="list-group-item p-1">
+                                        <strong>@user.UserName:</strong> @user.PostCount posts
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
     <div class="text-center mt-4">
         <a href="@Url.Action("Create", "StartPage")" class="buttonStuck">
             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-patch-plus"
@@ -58,9 +118,6 @@
             <div class="tooltip">Create New Post</div>
         </a>
     </div>
-
-
-
 }
 else
 {

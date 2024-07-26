@@ -21,5 +21,16 @@ namespace BlogApp.Data.Concrete{
     {
         return _context.Users.SingleOrDefault(u => u.UserId == userId); // Use SingleOrDefault instead of FindAsync
     }
+
+    public void UpdateUser(User user)
+    {
+        _context.Users.Update(user);
+    }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
+    
     }
 }

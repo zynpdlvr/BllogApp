@@ -1,12 +1,22 @@
 @model BlogApp.Entity.Post
 
-<div class="container">
+<div class="container my-4">
     <div class="row">
-        <div class="col-lg-8">
-            <div class="bg-white p-4">
-                <h1 class="h4 mb-4">@Model.Title</h1>
-                <img src="~/img/@Model.Image" class="img-fluid rounded" alt="">
-                <p>@Model.Description</p>
+        <div class="col-lg-8 mx-auto">
+            <div class="bg-white p-4 rounded shadow-sm">
+                <h1 class="h4 mb-4 text-center">@Model.Title</h1>
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <img src="~/img/@Model.Image" class="img-fluid rounded" style="width: 400px; height:300px; object-fit: cover;" alt="">
+                    </div>
+                    <div class="col-md-4">
+                        <p>@Model.Description</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h5>Content:</h5>
+                    <p>@Html.Raw(Model.Content)</p>
+                </div>
                 <p><strong>By:</strong> @Model.User.UserName</p>
 
                 <div class="mt-4">
@@ -15,13 +25,13 @@
                     {
                         <div class="d-flex align-items-center mb-3 p-2 rounded" style="background-color: rgb(232, 250, 255);" id="comment_@comment.CommentId">
                             <img src="~/img/@comment.User.Image" class="rounded-circle me-3" alt="Avatar" style="width: 50px; height: 50px;">
-                            <div>
+                            <div class="flex-grow-1">
                                 <h6 class="mt-0 mb-1 mt-1">@comment.User.UserName</h6>
                                 <span id="commentText_@comment.CommentId">@comment.Text</span>
                                 <br />
                                 <small class="text-muted">@comment.PublishedOn.ToString("MMMM dd, yyyy")</small>
 
-                                @if (User.Identity!.IsAuthenticated && comment.User.UserName == User.Identity.Name)
+                                @if (User.Identity!.IsAuthenticated && (comment.User.UserName == User.Identity.Name || User.IsInRole("admin")))
                                 {
                                     <button class="btn btn-warning btn-sm mt-2" onclick="showEditForm(@comment.CommentId, '@comment.Text')">Edit</button>
                                     <button class="btn btn-danger btn-sm mt-2" onclick="deleteComment(@comment.CommentId)">Delete</button>
@@ -31,7 +41,7 @@
                     }
                 </div>
 
-                <div id="editCommentForm" style="display: none;">
+                <div id="editCommentForm" class="mt-4" style="display: none;">
                     <form asp-action="EditComment" method="post">
                         <input type="hidden" name="CommentId" id="editCommentId" />
                         <div class="form-group">
@@ -44,7 +54,7 @@
 
                 @if (User.Identity!.IsAuthenticated)
                 {
-                    <form id="commentForm" asp-action="AddComment" method="post" style="text-align: center; margin-top: 10px;">
+                    <form id="commentForm" asp-action="AddComment" method="post" class="mt-4">
                         <input type="hidden" name="PostId" value="@Model.PostId" />
                         <div class="form-group">
                             <textarea class="form-control" name="CommentText" id="commentText" placeholder="Add a comment..." required></textarea>
@@ -54,12 +64,24 @@
                 }
                 else
                 {
-                    <p>You must log in to comment.</p>
+                    <p class="text-center mt-4">You must log in to comment.</p>
                 }
             </div>
         </div>
     </div>
 </div>
+<div class="text-center mt-4">
+        <a href="@Url.Action("Create", "StartPage")" class="buttonStuck">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-patch-plus"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5" />
+                <path
+                    d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911z" />
+            </svg>
+            <div class="tooltip">Create New Post</div>
+        </a>
+    </div>
 
 <script>
     function showEditForm(commentId, commentText) {
@@ -79,7 +101,8 @@
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
-                }
+                },
+                credentials: 'include'
             })
             .then(response => {
                 if (!response.ok) {

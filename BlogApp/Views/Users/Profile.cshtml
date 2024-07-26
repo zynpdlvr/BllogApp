@@ -1,18 +1,23 @@
 @model User
 
 <div class="row">
-    <div class="col-md-2">
-        <div class="bg-white p-2">
-            <img src="~/img/@Model.Image" class="img-fluid" alt="">
+    <div class="col-md-2 position-relative" style=" height: 300px; background-color: beige; border-radius: 1%; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 300px; position: relative;">
+        <div class="d-flex flex-column align-items-center" style="width: 100%; position: relative;">
+            <img src="~/img/@Model.Image" class="img-fluid " style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; overflow: hidden;" alt="profilepic">
+            <!-- Button to trigger modal -->
+            <button type="button" class="btn btn-secondary position-absolute" style="bottom: 0px; right: 10px;" data-bs-toggle="modal" data-bs-target="#profilePicModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"></path>
+                </svg>
+            </button>
+        </div>
+        <div class="text-center mt-2">
+            <h5>@Model.Name</h5>
         </div>
     </div>
     <div class="col-md-10">
         <div class="bg-white p-4">
-            <h5>@Model.Name</h5>
-            <hr>
-
-            <h2>Post List</h2>
-
+            <h4>Post List</h4>
             <hr>
             <table class="table table-bordered">
                 <thead>
@@ -28,7 +33,7 @@
                     {
                         <tr>
                             <td><img src="~/img/@item.Image" class="img-fluid" alt=""></td>
-                            <td>@item.Title</td>
+                            <td><a href="@Url.Action("Details", "StartPage", new { url = item.Url })" class="btn btn-link">@item.Title</a></td>
                             <td>@item.IsActive</td>
                             <td>
                                 <a href="/StartPage/Edit/@item.PostId" class="btn btn-warning">Edit</a>
@@ -36,21 +41,48 @@
                                     <input type="hidden" name="id" value="@item.PostId" />
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
-
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
             <div id="comments">
-                <h5 class="my-4">Yorumlar</h5>
+                <h4 class="my-4">Comments</h4>
                 <ul class="list-group">
                     @foreach (var comment in Model.Comments)
                     {
-                        <li class="list-group-item"><i class="bi bi-caret-right-text-fill"></i>@comment.Text
-                            <i><u>[@comment.Post.Title]</u></i></li>
+                        <li class="list-group-item"><i class="bi bi-caret-right-text-fill"></i><a href="@Url.Action("Details", "StartPage", new { url = comment.Post.Url })" class="btn btn-link">@comment.Post.Title</a> : @comment.Text</li>
                     }
                 </ul>
             </div>
         </div>
     </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="profilePicModal" tabindex="-1" aria-labelledby="profilePicModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profilePicModalLabel">Update Profile Picture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" enctype="multipart/form-data" action="@Url.Action("UpdateProfilePic", "Users")">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="profilePic" class="form-label">Choose a new profile picture</label>
+                        <input type="file" class="form-control" id="profilePic" name="profilePic" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Include Bootstrap JS (make sure to include Popper.js too) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>

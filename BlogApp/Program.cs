@@ -23,7 +23,11 @@ builder.Services.AddScoped<IUserRepository, EfUserRepository>();
 builder.Services.AddScoped<ICommentRepository, EfCommentRepository>();
 
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+        {
+            options.LoginPath = "/Users/Login";
+            options.AccessDeniedPath = "/Users/AccessDenied";
+        });
 
 var app = builder.Build();
 

@@ -32,6 +32,31 @@ namespace BlogApp.Controllers
             {
                 posts = posts.Where(x => x.Tags.Any(t => t.Url == tag));
             }
+            if (User.IsInRole("admin"))
+            {
+                var adminData = new
+                {
+                    UserCount = await _userRepository.Users.CountAsync(),
+                    TagStatistics = await _tagRepository.Tags
+                        .Select(tag => new
+                        {
+                            Text = tag.Text,
+                            PostCount = tag.Posts.Count
+                        })
+                        .ToListAsync(),
+                    MostActiveUsers = await _userRepository.Users
+                        .OrderByDescending(user => user.Posts.Count)
+                        .Take(10)
+                        .Select(user => new
+                        {
+                            UserName = user.UserName,
+                            PostCount = user.Posts.Count
+                        })
+                        .ToListAsync()
+                };
+
+                ViewData["AdminData"] = adminData;
+            }
 
             return View(new PostViewModel { Posts = await posts.ToListAsync() });
         }
@@ -101,14 +126,12 @@ namespace BlogApp.Controllers
             return RedirectToAction("Details", new { url = post.Url });
         }
 
-        [Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Create(PostCreateViewModel model)
         {
 
@@ -124,7 +147,7 @@ namespace BlogApp.Controllers
                         Description = model.Description,
                         Url = model.Url,
                         UserId = int.Parse(userId ?? ""),
-                        Image = "1.png",
+                        Image = "images.jpg",
                         IsActive = false
                     }
                 );
@@ -133,7 +156,6 @@ namespace BlogApp.Controllers
             return View(model);
         }
 
-        [Authorize]
         public async Task<IActionResult> List()
         {
             var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "");
@@ -149,7 +171,6 @@ namespace BlogApp.Controllers
             return View(await posts.ToListAsync());
         }
 
-        [Authorize]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -179,7 +200,6 @@ namespace BlogApp.Controllers
                 );
         }
 
-        [Authorize]
         [HttpPost]
 
         public IActionResult Edit(PostCreateViewModel model, int[] tagIds)
@@ -200,12 +220,11 @@ namespace BlogApp.Controllers
                     entityUpdate.IsActive = model.IsActive;
                 }
                 _postRepository.EditPost(entityUpdate, tagIds);
-                return RedirectToAction("List");
+                return RedirectToAction("Index");
             }
             return View(model);
         }
 
-        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -224,7 +243,6 @@ namespace BlogApp.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = await _postRepository.Posts.FirstOrDefaultAsync(p => p.PostId == id);
@@ -236,14 +254,13 @@ namespace BlogApp.Controllers
 
             _postRepository.DeletePost(post);
             await _postRepository.SaveChangesAsync();
-            return RedirectToAction("Index"); // Ensure you specify the controller here
+            return RedirectToAction("Index");
         }
 
 
         [HttpPost]
         public async Task<IActionResult> EditComment(int commentId, string commentText)
         {
-
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out var userId))
             {
@@ -256,8 +273,10 @@ namespace BlogApp.Controllers
                 return NotFound();
             }
 
+            // Allow admins to edit any comment
+            bool isAdmin = User.IsInRole("admin");
 
-            if (comment.UserId != userId)
+            if (comment.UserId != userId && !isAdmin)
             {
                 return Unauthorized();
             }
@@ -281,26 +300,29 @@ namespace BlogApp.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteComment(int commentId)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
             var comment = await _commentRepository.GetCommentByIdAsync(commentId);
-
             if (comment == null)
             {
-                return NotFound();
+                return Json(new { success = false });
             }
 
-            if (comment.UserId != userId)
+            int currentUserId;
+            bool isValidUserId = int.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out currentUserId);
+
+            if (!isValidUserId)
             {
-                return Unauthorized(); 
+                return Json(new { success = false });
             }
 
-            _commentRepository.DeleteComment(comment);
-            await _commentRepository.SaveChangesAsync();
+            if (User.IsInRole("admin") || comment.UserId == currentUserId)
+            {
+                _commentRepository.DeleteComment(comment);
+                await _commentRepository.SaveChangesAsync();
+                return Json(new { success = true });
+            }
 
-            return Json(new { success = true });
+            return Json(new { success = false });
         }
-
 
 
 

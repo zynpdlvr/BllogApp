@@ -7,5 +7,7 @@ namespace BlogApp.Data.Abstract{
         IQueryable<User> Users {get;}
         void CreateUser(User user);
         User GetUserById(int userId); 
+        void UpdateUser(User user);
+    Task<int> SaveChangesAsync();
     }
 }
