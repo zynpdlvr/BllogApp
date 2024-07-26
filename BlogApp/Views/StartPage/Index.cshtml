@@ -18,7 +18,7 @@
                             </div>
                             <div class="col-8">
                                 <h5><a href="@Url.Action("Details", "StartPage", new { url = post.Url })"
-                                        class="btn btn-link">@post.Title</a></h5>
+                                        class="linkbutton">@post.Title</a></h5>
                                 <p>@post.Description</p>
                                 @if (User.FindFirstValue(ClaimTypes.NameIdentifier) == post.UserId.ToString() ||
                                User.IsInRole("admin"))

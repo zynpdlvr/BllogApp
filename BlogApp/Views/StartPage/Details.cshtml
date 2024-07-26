@@ -33,8 +33,8 @@
 
                                 @if (User.Identity!.IsAuthenticated && (comment.User.UserName == User.Identity.Name || User.IsInRole("admin")))
                                 {
-                                    <button class="btn btn-warning btn-sm mt-2" onclick="showEditForm(@comment.CommentId, '@comment.Text')">Edit</button>
-                                    <button class="btn btn-danger btn-sm mt-2" onclick="deleteComment(@comment.CommentId)">Delete</button>
+                                    <button class="buttonAll btn btn-warning btn-sm mt-2" style= "width:auto;" onclick="showEditForm(@comment.CommentId, '@comment.Text')">Edit</button>
+                                    <button class="buttonAll btn btn-danger btn-sm mt-2" style= "width:auto;"onclick="deleteComment(@comment.CommentId)">Delete</button>
                                 }
                             </div>
                         </div>

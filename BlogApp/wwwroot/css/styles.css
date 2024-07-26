@@ -6,6 +6,12 @@ body {
     display: flex;
     flex-direction: column;
 }
+.linkbutton{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+    
+    color: black;
+}
 
 .container {
     flex: 1;
