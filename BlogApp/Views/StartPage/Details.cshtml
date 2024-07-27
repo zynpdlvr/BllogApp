@@ -24,7 +24,7 @@
                     @foreach (var comment in Model.Comments)
                     {
                         <div class="d-flex align-items-center mb-3 p-2 rounded" style="background-color: rgb(232, 250, 255);" id="comment_@comment.CommentId">
-                            <img src="~/img/@comment.User.Image" class="rounded-circle me-3" alt="Avatar" style="width: 50px; height: 50px;">
+                            <img src="~/img/Generic-Profile.png" class="img-fluid me-3" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; overflow: hidden;" alt="profilepic">
                             <div class="flex-grow-1">
                                 <h6 class="mt-0 mb-1 mt-1">@comment.User.UserName</h6>
                                 <span id="commentText_@comment.CommentId">@comment.Text</span>

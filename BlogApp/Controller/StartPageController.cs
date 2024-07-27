@@ -32,7 +32,7 @@ namespace BlogApp.Controllers
             {
                 posts = posts.Where(x => x.Tags.Any(t => t.Url == tag));
             }
-            if (User.IsInRole("admin"))
+            if (User.IsInRole("admin")) ////admin data
             {
                 var adminData = new
                 {
@@ -147,7 +147,7 @@ namespace BlogApp.Controllers
                         Description = model.Description,
                         Url = model.Url,
                         UserId = int.Parse(userId ?? ""),
-                        Image = "images.jpg",
+                        Image = "download.jpg",
                         IsActive = false
                     }
                 );

@@ -5,6 +5,14 @@
       "PackagePath": "staticwebassets\\css\\styles.css"
     },
     {
+      "Id": "C:\\Users\\dilav\\BlogApp\\BlogApp\\wwwroot\\img\\Generic-Profile.png",
+      "PackagePath": "staticwebassets\\img\\Generic-Profile.png"
+    },
+    {
+      "Id": "C:\\Users\\dilav\\BlogApp\\BlogApp\\wwwroot\\img\\download.jpg",
+      "PackagePath": "staticwebassets\\img\\download.jpg"
+    },
+    {
       "Id": "C:\\Users\\dilav\\BlogApp\\BlogApp\\wwwroot\\img\\images.jpg",
       "PackagePath": "staticwebassets\\img\\images.jpg"
     },

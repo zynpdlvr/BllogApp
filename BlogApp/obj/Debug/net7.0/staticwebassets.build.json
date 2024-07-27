@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0M/GKgMmkrcTVCO2XC33tGv0/dt1cOIUKrxZU4XmeOU=",
+  "Hash": "KG8vihkXEmI6xwpiHTln7JZyvkh8Acbb8qE3pC0hAH8=",
   "Source": "BlogApp",
   "BasePath": "_content/BlogApp",
   "Mode": "Default",
@@ -32,6 +32,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\dilav\\BlogApp\\BlogApp\\wwwroot\\img\\download.jpg",
+      "SourceId": "BlogApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\dilav\\BlogApp\\BlogApp\\wwwroot\\",
+      "BasePath": "_content/BlogApp",
+      "RelativePath": "img/download.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\download.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\dilav\\BlogApp\\BlogApp\\wwwroot\\img\\Generic-Profile.png",
+      "SourceId": "BlogApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\dilav\\BlogApp\\BlogApp\\wwwroot\\",
+      "BasePath": "_content/BlogApp",
+      "RelativePath": "img/Generic-Profile.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\Generic-Profile.png"
     },
     {
       "Identity": "C:\\Users\\dilav\\BlogApp\\BlogApp\\wwwroot\\img\\images.jpg",
